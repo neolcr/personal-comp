@@ -1,76 +1,22 @@
-#include <cctype>
-#include <cstdlib>
-#include <cwctype>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <optional>
-#include <vector>
-
-enum class TokenType {
-    _return,
-    int_lit,
-    semi
-};
-
-struct Token {
-    TokenType type;
-    std::optional<std::string> value {};
-};
+#include "./tokenization.hpp"
 
 
-std::vector<Token> tokenize(const std::string& str){
-    // for (char c : str) {
-    //     std::cout << c << std::endl;
-    // }
-    std::vector<Token> tokens {};
-    std::string buf {};
-    for (int i = 0; i < str.length() ; i++ ) {
-        char c = str.at(i);
-        if (std::isalpha(c)) {
-            buf.push_back(c);
-            i++;
-            while (std::isalpha(str.at(i))) {
-                buf.push_back(str.at(i));
-                i++;
+std::string tokens_to_asm(const std::vector<Token>& tokens) {
+    std::stringstream output;
+    output << "global _start\n_start:\n";
+    for (int i = 0; i < tokens.size(); i++){
+        const Token& token = tokens.at(i);
+        if (token.type == TokenType::exit){
+            if (i + 1 < tokens.size() && tokens.at(i + 1).type == TokenType::int_lit){
+                if (i + 2 < tokens.size() && tokens.at(i + 2).type == TokenType::semi){
+                    output << "    mov rax, 60\n";
+                    output << "    mov rdi, " << tokens.at(i + 1).value.value() << "\n";
+                    output << "    syscall";
+                }
             }
-            i--;
-
-            if (buf == "return"){
-                tokens.push_back({.type = TokenType::_return});
-                std::cout << "Pushed back: " << buf << std::endl;
-                buf.clear();
-                continue;
-            } else {
-                std::cerr << "You messed up" << std::endl;
-                exit(EXIT_FAILURE);
-            }
-
-        } else if (std::isdigit(c)) {
-            buf.push_back(c);
-            i++;
-            while(std::isdigit(str.at(i))){
-                buf.push_back(str.at(i));
-                i++;
-            }
-            i--;
-            tokens.push_back({.type = TokenType::int_lit, .value = buf});
-            std::cout << "Pushed back: " << buf << std::endl;
-            buf.clear();
-
-        } else if (c == ';') {
-            tokens.push_back({.type = TokenType::semi});
-            std::cout << "Pushed back: " << c << std::endl;
-
-        } else if (std::isspace(c)){
-            continue;
-        } else {
-            std::cerr << "You messed up because there is something weird" << std::endl;
-            exit(EXIT_FAILURE);
         }
     }
-
-    return tokens;
+    return output.str();
 }
 
 int main(int argc, char* argv[]) {
@@ -89,10 +35,17 @@ int main(int argc, char* argv[]) {
         contents = contents_stream.str();
     }
 
-    std::cout << "I read: " << contents << std::endl;
+    // std::cout << "I read: " << contents << std::endl;
 
+    std::vector<Token> tokens = tokenize(contents);
+    // std::cout <<tokens_to_asm(tokens) << std::endl;
+    {
+        std::fstream file("out.asm", std::ios::out);
+        file << tokens_to_asm(tokens);
+    }
 
-    tokenize(contents);
+    system("nasm -f elf64 out.asm -o out.o");
+    system("ld out.o -o out");
 
     return EXIT_SUCCESS;
 }
