@@ -24,29 +24,24 @@ struct Token {
 
 class Tokenizer {
 public:
-    inline Tokenizer(std::string& src): m_src(std::move(src))
-    {
+    inline explicit Tokenizer(std::string src): m_src(std::move(src)) {}
 
-    }
 
-    std::vector<Token> tokenize(const std::string& str){
+    std::vector<Token> tokenize(){
         // for (char c : str) {
         //     std::cout << c << std::endl;
         // }
         std::vector<Token> tokens {};
-        std::string buf {};
-        for (int i = 0; i < str.length() ; i++ ) {
-            char c = str.at(i);
-            if (std::isalpha(c)) {
-                buf.push_back(c);
-                i++;
-                while (std::isalpha(str.at(i))) {
-                    buf.push_back(str.at(i));
-                    i++;
-                }
-                i--;
+        std::string buf;
 
-                if (buf == "exit"){
+        while(peak().has_value()) {
+            if (std::isalpha(peak().value())) {
+                buf.push_back(consume());
+                while (peak().has_value() && std::isalnum(peak().value())){
+                    buf.push_back(consume());
+                }
+
+                if (buf == "exit") {
                     tokens.push_back({.type = TokenType::exit});
                     buf.clear();
                     continue;
@@ -54,21 +49,21 @@ public:
                     std::cerr << "You messed up" << std::endl;
                     exit(EXIT_FAILURE);
                 }
-
-            } else if (std::isdigit(c)) {
-                buf.push_back(c);
-                i++;
-                while(std::isdigit(str.at(i))){
-                    buf.push_back(str.at(i));
-                    i++;
+            }
+            else if (std::isdigit(peak().value())){
+                buf.push_back(consume());
+                while(peak().has_value() && std::isdigit(peak().value())) {
+                    buf.push_back(consume());
                 }
-                i--;
                 tokens.push_back({.type = TokenType::int_lit, .value = buf});
                 buf.clear();
-
-            } else if (c == ';') {
+                continue;
+            } else if (peak().value() == ';') {
+                consume();
                 tokens.push_back({.type = TokenType::semi});
-            } else if (std::isspace(c)){
+                continue;
+            } else if (std::isspace(peak().value())) {
+                consume();
                 continue;
             } else {
                 std::cerr << "You messed up because there is something weird" << std::endl;
@@ -76,6 +71,7 @@ public:
             }
         }
 
+        m_index = 0;
         return tokens;
     }
 private:
@@ -95,7 +91,7 @@ private:
     }
 
     const std::string m_src;
-    int m_index;
+    int m_index = 0;
 
 
 };
