@@ -1,5 +1,7 @@
 CMakeFiles/hydro.dir/src/main.cpp.o: /home/neolcr/Hydrogen/src/main.cpp \
- /usr/include/stdc-predef.h /home/neolcr/Hydrogen/src/./tokenization.hpp \
+ /usr/include/stdc-predef.h /home/neolcr/Hydrogen/src/./generation.hpp \
+ /home/neolcr/Hydrogen/src/././parser.hpp \
+ /home/neolcr/Hydrogen/src/./././tokenization.hpp \
  /usr/include/c++/14.2.1/cctype \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/os_defines.h \

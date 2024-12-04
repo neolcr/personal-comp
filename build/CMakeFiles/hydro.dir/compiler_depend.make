@@ -3,6 +3,8 @@
 
 CMakeFiles/hydro.dir/src/main.cpp.o: /home/neolcr/Hydrogen/src/main.cpp \
   /home/neolcr/Hydrogen/src/tokenization.hpp \
+  /home/neolcr/Hydrogen/src/parser.hpp \
+  /home/neolcr/Hydrogen/src/generation.hpp \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -332,6 +334,10 @@ hydro: /usr/lib/libc.so \
 
 /usr/include/c++/14.2.1/bits/streambuf_iterator.h:
 
+/usr/include/c++/14.2.1/bits/streambuf.tcc:
+
+/usr/include/c++/14.2.1/bits/stl_vector.h:
+
 /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/ctype_inline.h:
 
 /usr/include/c++/14.2.1/stdexcept:
@@ -356,21 +362,9 @@ hydro: /usr/lib/libc.so \
 
 /usr/include/bits/types/struct_FILE.h:
 
-/usr/include/c++/14.2.1/bits/iterator_concepts.h:
-
-/usr/include/c++/14.2.1/iosfwd:
-
-/usr/include/c++/14.2.1/bits/ranges_base.h:
-
 /usr/include/c++/14.2.1/x86_64-pc-linux-gnu/bits/atomic_word.h:
 
 /usr/include/bits/types/locale_t.h:
-
-/usr/include/bits/typesizes.h:
-
-/usr/include/bits/cpu-set.h:
-
-/usr/include/c++/14.2.1/bits/functexcept.h:
 
 /usr/include/bits/sched.h:
 
@@ -381,8 +375,6 @@ hydro: /usr/lib/libc.so \
 /usr/include/bits/types/clockid_t.h:
 
 /usr/include/bits/atomic_wide_counter.h:
-
-/usr/include/c++/14.2.1/bits/streambuf.tcc:
 
 /usr/include/bits/types/__locale_t.h:
 
@@ -414,20 +406,6 @@ hydro: /usr/lib/libc.so \
 
 /usr/include/bits/endian.h:
 
-/usr/include/c++/14.2.1/bits/version.h:
-
-/usr/include/bits/types/mbstate_t.h:
-
-/usr/include/bits/floatn-common.h:
-
-/usr/include/bits/types/sigset_t.h:
-
-/usr/include/c++/14.2.1/bits/ostream.tcc:
-
-/usr/include/features.h:
-
-/usr/include/bits/endianness.h:
-
 /usr/include/bits/stdlib-float.h:
 
 /usr/include/bits/time64.h:
@@ -450,8 +428,6 @@ hydro: /usr/lib/libc.so \
 
 /usr/include/alloca.h:
 
-/usr/include/bits/locale.h:
-
 /usr/include/bits/types/struct___jmp_buf_tag.h:
 
 /usr/include/bits/setjmp.h:
@@ -468,15 +444,39 @@ hydro: /usr/lib/libc.so \
 
 /usr/include/asm-generic/errno.h:
 
+/usr/include/bits/thread-shared-types.h:
+
+/usr/include/bits/types/cookie_io_functions_t.h:
+
+/usr/include/c++/14.2.1/bits/stl_uninitialized.h:
+
+/usr/include/bits/libc-header-start.h:
+
+/usr/include/features.h:
+
+/usr/include/bits/endianness.h:
+
+/home/neolcr/Hydrogen/src/parser.hpp:
+
 /usr/include/bits/long-double.h:
 
 /usr/include/c++/14.2.1/backward/binders.h:
 
 /home/neolcr/Hydrogen/src/main.cpp:
 
-/usr/include/c++/14.2.1/bits/stl_pair.h:
+/usr/include/bits/locale.h:
 
-/usr/include/bits/libc-header-start.h:
+/usr/include/c++/14.2.1/bits/version.h:
+
+/usr/include/bits/types/mbstate_t.h:
+
+/usr/include/bits/floatn-common.h:
+
+/usr/include/bits/types/sigset_t.h:
+
+/usr/include/c++/14.2.1/bits/ostream.tcc:
+
+/usr/include/c++/14.2.1/bits/stl_pair.h:
 
 /usr/include/wctype.h:
 
@@ -512,11 +512,23 @@ hydro: /usr/lib/libc.so \
 
 /usr/include/c++/14.2.1/bits/fstream.tcc:
 
+/usr/include/bits/cpu-set.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/c++/14.2.1/bits/functexcept.h:
+
 /usr/include/bits/struct_mutex.h:
+
+/home/neolcr/Hydrogen/src/generation.hpp:
 
 /usr/include/c++/14.2.1/bits/ranges_cmp.h:
 
-/usr/include/bits/thread-shared-types.h:
+/usr/include/c++/14.2.1/bits/iterator_concepts.h:
+
+/usr/include/c++/14.2.1/iosfwd:
+
+/usr/include/c++/14.2.1/bits/ranges_base.h:
 
 /usr/include/bits/timesize.h:
 
@@ -639,9 +651,3 @@ hydro: /usr/lib/libc.so \
 /usr/include/c++/14.2.1/bits/basic_string.h:
 
 /usr/include/c++/14.2.1/bits/stl_iterator_base_funcs.h:
-
-/usr/include/bits/types/cookie_io_functions_t.h:
-
-/usr/include/c++/14.2.1/bits/stl_uninitialized.h:
-
-/usr/include/c++/14.2.1/bits/stl_vector.h:
