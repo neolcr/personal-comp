@@ -1,0 +1,12 @@
+exit,
+int_lit,
+semi,
+open_paren,
+close_paren
+
+
+Token 1: Identifier "exit"
+Token 2: OpenParent "("
+Token 3: Type "int"
+Token 4: CloseParent ")"
+Token 5: Semicolon ";"

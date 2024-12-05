@@ -3,7 +3,6 @@
 #include "./tokenization.hpp"
 #include <cstdlib>
 
-
 struct NodeExpr {
     Token int_lit;
 };
@@ -12,34 +11,43 @@ struct NodeExit {
     NodeExpr expr;
 };
 
-
-
 class Parser {
 public:
-    inline explicit Parser(std::vector<Token> tokens) : m_tokens(std::move(tokens)) {}
+    inline explicit Parser(std::vector<Token> tokens)
+        : m_tokens(std::move(tokens))
+    {
+    }
 
-    std::optional<NodeExpr> parse_expr() {
-        if (peak().has_value() && peak().value().type == TokenType::int_lit){
-            return NodeExpr{.int_lit = consume()};
+    std::optional<NodeExpr> parse_expr()
+    {
+        if (peek().has_value() && peek().value().type == TokenType::int_lit) {
+            return NodeExpr { .int_lit = consume() };
         } else {
             return {};
         }
     }
 
-
-    std::optional<NodeExit> parse() {
+    std::optional<NodeExit> parse()
+    {
 
         std::optional<NodeExit> exit_node;
 
-        while(peak().has_value()){
+        while (peek().has_value()) {
 
-            if (peak().value().type == TokenType::exit) {
+            if (peek().value().type == TokenType::exit
+                && peek(1).has_value()
+                && peek(1).value().type == TokenType::open_paren
+                && peek(2).has_value()
+                && peek(2).value().type == TokenType::int_lit
+                && peek(3).has_value()
+                && peek(3).value().type == TokenType::close_paren) {
 
                 consume();
+                consume();
 
-                if (auto node_expr = parse_expr()){
+                if (auto node_expr = parse_expr()) {
 
-                    exit_node = NodeExit {.expr = node_expr.value()};
+                    exit_node = NodeExit { .expr = node_expr.value() };
 
                 } else {
 
@@ -47,39 +55,45 @@ public:
 
                     exit(EXIT_FAILURE);
                 }
-            } else if (peak().has_value() && peak().value().type == TokenType::semi){
+                consume();
+                consume();
+            } else if (peek().value().type == TokenType::semi) {
                 consume();
             } else {
-                std::cerr << "Invalid expression semicolon" << std::endl;
+                std::cerr << "Expected semicolon" << std::endl;
                 exit(EXIT_FAILURE);
             }
-
         }
 
         m_index = 0;
 
         return exit_node;
-
     }
 
 private:
     const std::vector<Token> m_tokens;
     size_t m_index = 0;
 
-    [[nodiscard]] inline std::optional<Token> peak(int ahead = 1) const {
+    [[nodiscard]] inline std::optional<Token> peek(int offset = 0) const
+    {
 
-        if (m_index + ahead >= m_tokens.size()) {
+        if (m_index + offset >= m_tokens.size()) {
 
             return {};
 
         } else {
 
-            return m_tokens.at(m_index);
+            return m_tokens.at(m_index + offset);
         }
-
     }
 
-    inline Token consume() {
+    inline Token consume()
+    {
         return m_tokens.at(m_index++);
+    }
+
+    inline bool is_paren(TokenType t)
+    {
+        return peek().value().type == TokenType::exit && peek(1).has_value() && peek(1).value().type == t;
     }
 };

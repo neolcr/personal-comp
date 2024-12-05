@@ -1,0 +1,4 @@
+[prog] -> [stmt]*
+[stmt] -> { exit([expr]); }
+[stmt] -> { let ident = [expr]; }
+[expr] -> int_lit

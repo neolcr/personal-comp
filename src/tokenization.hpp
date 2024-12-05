@@ -3,17 +3,18 @@
 #include <cctype>
 #include <cstdlib>
 #include <cwctype>
-#include <iostream>
 #include <fstream>
-#include <sstream>
+#include <iostream>
 #include <optional>
+#include <sstream>
 #include <vector>
-
 
 enum class TokenType {
     exit,
     int_lit,
-    semi
+    semi,
+    open_paren,
+    close_paren
 };
 
 struct Token {
@@ -21,48 +22,54 @@ struct Token {
     std::optional<std::string> value {};
 };
 
-
 class Tokenizer {
 public:
-    inline explicit Tokenizer(std::string src): m_src(std::move(src)) {}
+    inline explicit Tokenizer(std::string src)
+        : m_src(std::move(src))
+    {
+    }
 
-
-    std::vector<Token> tokenize(){
-        // for (char c : str) {
-        //     std::cout << c << std::endl;
-        // }
+    std::vector<Token> tokenize()
+    {
         std::vector<Token> tokens {};
         std::string buf;
 
-        while(peak().has_value()) {
-            if (std::isalpha(peak().value())) {
+        while (peek().has_value()) {
+            if (std::isalpha(peek().value())) {
                 buf.push_back(consume());
-                while (peak().has_value() && std::isalnum(peak().value())){
+                while (peek().has_value() && std::isalnum(peek().value())) {
                     buf.push_back(consume());
                 }
 
                 if (buf == "exit") {
-                    tokens.push_back({.type = TokenType::exit});
+                    tokens.push_back({ .type = TokenType::exit });
                     buf.clear();
                     continue;
                 } else {
                     std::cerr << "You messed up" << std::endl;
                     exit(EXIT_FAILURE);
                 }
-            }
-            else if (std::isdigit(peak().value())){
+            } else if (std::isdigit(peek().value())) {
                 buf.push_back(consume());
-                while(peak().has_value() && std::isdigit(peak().value())) {
+                while (peek().has_value() && std::isdigit(peek().value())) {
                     buf.push_back(consume());
                 }
-                tokens.push_back({.type = TokenType::int_lit, .value = buf});
+                tokens.push_back({ .type = TokenType::int_lit, .value = buf });
                 buf.clear();
                 continue;
-            } else if (peak().value() == ';') {
+            } else if (peek().value() == '(') {
                 consume();
-                tokens.push_back({.type = TokenType::semi});
+                tokens.push_back({ .type = TokenType::open_paren });
                 continue;
-            } else if (std::isspace(peak().value())) {
+            } else if (peek().value() == ')') {
+                consume();
+                tokens.push_back({ .type = TokenType::close_paren });
+                continue;
+            } else if (peek().value() == ';') {
+                consume();
+                tokens.push_back({ .type = TokenType::semi });
+                continue;
+            } else if (std::isspace(peek().value())) {
                 consume();
                 continue;
             } else {
@@ -76,23 +83,20 @@ public:
     }
 
 private:
-
-    [[nodiscard]] inline std::optional<char> peak(int ahead = 1) const {
-        if (m_index + ahead >= m_src.length()){
+    [[nodiscard]] inline std::optional<char> peek(int offset = 0) const
+    {
+        if (m_index + offset >= m_src.length()) {
             return {};
         } else {
-            return m_src.at(m_index);
+            return m_src.at(m_index + offset);
         }
-
     }
 
-    inline char consume() {
+    inline char consume()
+    {
         return m_src.at(m_index++);
-
     }
 
     const std::string m_src;
     int m_index = 0;
-
-
 };
