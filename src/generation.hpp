@@ -13,7 +13,6 @@ public:
         output << "    mov rax, 60\n";
         output << "    mov rdi, " << m_root.expr.int_lit.value.value() << "\n";
         output << "    syscall";
-        // std::cout << output.str() << std::endl;
         return output.str();
 
     }
